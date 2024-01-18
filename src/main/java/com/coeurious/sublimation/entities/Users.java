@@ -1,6 +1,10 @@
 package com.coeurious.sublimation.entities;
 
+import java.time.Instant;
 import java.util.List;
+
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.generator.Generator;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -23,11 +27,13 @@ public class Users {
 	private Long id;
 	
 	@Column (unique=true)
-	private String username;
+	private String mail;
 	private String password;
 	private Boolean enabled;
+	private Instant creationDate;
+	private Instant modificationDate;
 	
 	@ManyToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
-	@JoinTable(joinColumns=@JoinColumn(name="user_id"), inverseJoinColumns=@JoinColumn(name="role_id"))
+	@JoinTable(joinColumns=@JoinColumn(name="users_id"), inverseJoinColumns=@JoinColumn(name="role_id"))
 	private List<Role> roles;
 }
