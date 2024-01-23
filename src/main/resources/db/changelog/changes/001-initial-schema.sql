@@ -1,3 +1,6 @@
+--liquibase formatted sql
+
+--changeset coeurious:1 
 create table role (
     id bigserial not null, 
     role varchar(255), 

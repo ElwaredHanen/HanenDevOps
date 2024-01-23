@@ -1,4 +1,4 @@
-package com.coeurious.sublimation.config;
+package com.coeurious.sublimation.service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,12 +18,17 @@ import com.coeurious.sublimation.repository.UsersRepository;
 @Service
 public class CoeuriousUserDetails implements UserDetailsService{
 	
-	@Autowired
 	UsersRepository usersRepository;
+	
+	@Autowired
+	public CoeuriousUserDetails(UsersRepository usersRepository) {
+		this.usersRepository = usersRepository;
+	}
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		String email, password = null;
+		String email;
+		String password;
 		List<GrantedAuthority> authorities = new ArrayList<>();
 		
 		Users users = usersRepository.findByMail(username);
