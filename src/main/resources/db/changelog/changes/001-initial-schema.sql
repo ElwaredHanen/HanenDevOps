@@ -7,6 +7,12 @@ create table role (
     primary key (id)
 );
 
+create table cgu (
+    id bigserial not null,
+    content text,
+    primary key (id)
+);
+
 create table users (
     id bigserial not null, 
     mail varchar(255) unique, 
@@ -14,7 +20,10 @@ create table users (
     enabled boolean, 
     creation_date timestamp, 
     modification_date timestamp, 
-    primary key (id)
+    cgu_consent boolean,
+    cgu_id bigint,
+    primary key (id),
+    constraint fk_cgu foreign key (cgu_id) references cgu(id)
 );
 
 create table users_roles (
@@ -29,20 +38,3 @@ insert into role values(default, 'reader');
 insert into users values(default, 'toto@laposte.net', '12345', 'true', '16/02/2023', '16/02/2023');
 insert into users_roles values(1, 1);
 
---create table users(
---    id bigserial not null,
---    username varchar(50) not null,
---    password varchar(500) not null,
---    enabled boolean not null,
---    primary key (id)
---);
---create table authorities (
---    id bigserial not null,
---    username varchar(50) not null,
---    authority varchar(50) not null,
---    primary key (id)
---);
---create unique index ix_auth_username on authorities (username,authority);
---
---insert into users values(default, 'happy', '12345', 'true');
---insert into authorities values(default, 'happy', 'write');

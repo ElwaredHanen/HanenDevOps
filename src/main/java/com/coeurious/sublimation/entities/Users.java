@@ -16,7 +16,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 @Data
 @Entity
@@ -28,10 +31,23 @@ public class Users {
 	
 	@Column (unique=true)
 	private String mail;
+	
 	private String password;
+	
 	private Boolean enabled;
+	
+	@Column(name = "creation_date")
 	private Instant creationDate;
+	
+	@Column(name = "modification_date")
 	private Instant modificationDate;
+	
+	@Column(name = "cgu_consent")
+	private Boolean cguConsent;
+	
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "cgu_id", nullable = false)
+	private Cgu cgu;
 	
 	@ManyToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	@JoinTable(joinColumns=@JoinColumn(name="users_id"), inverseJoinColumns=@JoinColumn(name="role_id"))

@@ -8,11 +8,12 @@ import lombok.Data;
 
 @Data
 @Entity
-public class Role {
-
+public class Cgu {
+	
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue (strategy=GenerationType.IDENTITY)
 	private Long id;
 	
-	private String role;
+	private String content;
+
 }

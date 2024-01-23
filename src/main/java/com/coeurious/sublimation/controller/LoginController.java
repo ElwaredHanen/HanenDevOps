@@ -3,40 +3,43 @@ package com.coeurious.sublimation.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.coeurious.sublimation.entities.Users;
-import com.coeurious.sublimation.repository.UsersRepository;
+import com.coeurious.sublimation.entities.dto.UsersRegisterDto;
+import com.coeurious.sublimation.entities.mapper.UsersMapperUsersRegisterDto;
+import com.coeurious.sublimation.service.LoginService;
 
 @RestController
 public class LoginController {
 	
-	private final UsersRepository usersRepository;
-	private final PasswordEncoder passwordEncoder;
+    private final UsersMapperUsersRegisterDto usersMapperUsersRegisterDto;
+    private final LoginService loginService;
 	
 	@Autowired
-	public LoginController(UsersRepository usersRepository, PasswordEncoder passwordEncoder) {
-		this.usersRepository = usersRepository;
-		this.passwordEncoder = passwordEncoder;
+	public LoginController(UsersMapperUsersRegisterDto usersMapperUsersRegisterDto, LoginService loginService) {
+		this.usersMapperUsersRegisterDto = usersMapperUsersRegisterDto;
+		this.loginService = loginService;
 	}
 	
+	/**
+	 * Register a new user in the database
+	 * 
+	 * @param userDto : The user to register
+	 * @return : 201 if the user is created, 500 otherwise
+	 */
 	@PostMapping("/register")
-	public ResponseEntity<String> registerUser(@RequestBody Users user){
-		Users savedUser = null;
-		
+	public ResponseEntity<String> registerUser(@RequestBody UsersRegisterDto userDto){
 		ResponseEntity<String> response = null;
 		
+		Users user = usersMapperUsersRegisterDto.usersRegisterDtoToUsers(userDto);
+		
 		try {
-			String hashPassword = passwordEncoder.encode(user.getPassword());
+			Users registeredUser = loginService.register(user);
 			
-			user.setPassword(hashPassword);
-			
-			savedUser = usersRepository.save(user);
-			if (savedUser.getId() > 0) {
+			if (registeredUser.getId() > 0) {
 				response = ResponseEntity
 						.status(HttpStatus.CREATED)
 						.body("User created");
