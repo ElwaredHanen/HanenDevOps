@@ -35,6 +35,6 @@ alter table if exists users_roles add constraint FK_role foreign key (role_id) r
 alter table if exists users_roles add constraint FK_users foreign key (users_id) references users;
 
 insert into role values(default, 'reader');
-insert into users values(default, 'toto@laposte.net', '12345', 'true', '16/02/2023', '16/02/2023');
+insert into users values(default, 'toto@laposte.net', '12345', 'true', '2024-01-25 09:01:15.0', '2024-01-25 09:01:15.0');
 insert into users_roles values(1, 1);
 
