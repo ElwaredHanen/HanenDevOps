@@ -1,9 +1,10 @@
 package com.coeurious.sublimation.controller;
 
 import com.coeurious.sublimation.entities.Users;
-import com.coeurious.sublimation.entities.dto.UsersRegisterDto;
-import com.coeurious.sublimation.entities.mapper.UsersMapperUsersRegisterDto;
-import com.coeurious.sublimation.service.LoginService;
+import com.coeurious.sublimation.dto.AuthDto;
+import com.coeurious.sublimation.mapper.UsersMapperUsersRegisterDto;
+import com.coeurious.sublimation.repository.UsersRepository;
+import com.coeurious.sublimation.service.AuthService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,43 +27,38 @@ class LoginControllerTest {
 	LoginController loginController;
 
 	@Mock
-    LoginService loginService;
+    AuthService authService;
     @Mock
     UsersMapperUsersRegisterDto usersMapperUsersRegisterDto;
-    private UsersRegisterDto userDto;
-    private ResponseEntity<String> response;
+    @Mock
+    UsersRepository usersRepository;
+    private AuthDto userDto;
+    private ResponseEntity<?> response;
 	@BeforeEach
 	void setup() {
-        userDto = new UsersRegisterDto();
-		userDto.setPassword("12345");
-        userDto.setMail("test@test.com");
+        userDto = AuthDto.builder()
+                .password("12345")
+                .email("test@test.com")
+                .build();
 	}
 
 	@Test
-	void testRegister_Ok() {
+	void testSignup_Ok() {
         //setup
-        Users user = new Users();
-        user.setId(1L);
-        user.setPassword("12345");
-        user.setMail("test@test.com");
-        Mockito.when(usersMapperUsersRegisterDto.usersRegisterDtoToUsers(userDto)).thenReturn(user);
-        Mockito.when(loginService.register(user)).thenReturn(user);
-        response = loginController.registerUser(userDto);
+        Mockito.when(authService.signUp(Mockito.any())).thenReturn(Mockito.any());
+        response = loginController.signUp(userDto);
 		assertThat(response).isNotNull();
         assertThat(response.getStatusCode().is2xxSuccessful()).isTrue();
 	}
 
     @Test
-    void testRegister_ID_0() {
-        //setup
-        Users user = new Users();
-        user.setId(0L);
-        user.setPassword("12345");
-        user.setMail("test@test.com");
-        Mockito.when(usersMapperUsersRegisterDto.usersRegisterDtoToUsers(userDto)).thenReturn(user);
-        Mockito.when(loginService.register(user)).thenReturn(user);
-        response = loginController.registerUser(userDto);
-        assertThat(response).isNull();
+    void testSignup_KO() {
+        Mockito.when(authService.signUp(Mockito.any()))
+                .thenThrow(new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), null,
+                        Charset.defaultCharset()));
+        response = loginController.signUp(userDto);
+        assertThat(response).isNotNull();
+        assertThat(response.getStatusCode().is5xxServerError()).isTrue();
     }
 
     @Test
@@ -71,15 +67,15 @@ class LoginControllerTest {
         Users user = new Users();
         user.setId(0L);
         user.setPassword("12345");
-        user.setMail("test@test.com");
-        Mockito.when(usersMapperUsersRegisterDto.usersRegisterDtoToUsers(userDto)).thenReturn(user);
-        Mockito.when(loginService.register(user))
+        user.setEmail("test@test.com");
+       // Mockito.when(usersMapperUsersRegisterDto.usersRegisterDtoToUsers(userDto)).thenReturn(user);
+        /*Mockito.when(authService.register(user))
                 .thenThrow(new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), null,
                         Charset.defaultCharset()));
 
         response = loginController.registerUser(userDto);
         assertThat(response).isNotNull();
-        assertThat(response.getStatusCode().is5xxServerError()).isTrue();
+        assertThat(response.getStatusCode().is5xxServerError()).isTrue();*/
     }
 
 
