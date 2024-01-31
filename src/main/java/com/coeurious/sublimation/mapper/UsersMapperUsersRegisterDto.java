@@ -1,9 +1,9 @@
-package com.coeurious.sublimation.entities.mapper;
+package com.coeurious.sublimation.mapper;
 
+import com.coeurious.sublimation.dto.UsersRegisterDto;
 import org.mapstruct.Mapper;
 
 import com.coeurious.sublimation.entities.Users;
-import com.coeurious.sublimation.entities.dto.UsersRegisterDto;
 
 @Mapper
 public interface UsersMapperUsersRegisterDto {
