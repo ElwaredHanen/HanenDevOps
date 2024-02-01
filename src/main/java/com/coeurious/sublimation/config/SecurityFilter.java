@@ -15,12 +15,12 @@ import java.io.IOException;
 
 @Component
 public class SecurityFilter extends OncePerRequestFilter {
-    private final TokenProvider tokenService;
+    private final TokenProvider tokenProvider;
     private final UsersRepository userRepository;
 
     @Autowired
-    public SecurityFilter(TokenProvider tokenService, UsersRepository userRepository) {
-        this.tokenService = tokenService;
+    public SecurityFilter(TokenProvider tokenProvider, UsersRepository userRepository) {
+        this.tokenProvider = tokenProvider;
         this.userRepository = userRepository;
     }
 
@@ -29,10 +29,10 @@ public class SecurityFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         var token = this.recoverToken(request);
         if (token != null) {
-            var email = tokenService.validateToken(token);
+            var email = tokenProvider.validateToken(token);
             var user = userRepository.findByEmail(email);
             if (user != null) {
-                var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+                var authentication = new UsernamePasswordAuthenticationToken(user, token, user.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         }

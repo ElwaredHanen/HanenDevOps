@@ -13,9 +13,5 @@ class SublimationApplicationTests {
 	void applicationContextLoaded() {
 	}
 
-	@Test
-	void applicationContextTest() {
-		SublimationApplication.main(new String[] {});
-	}
 
 }
