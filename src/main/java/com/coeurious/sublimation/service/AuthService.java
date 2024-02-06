@@ -4,6 +4,7 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.coeurious.sublimation.dto.AuthDto;
 import com.coeurious.sublimation.entities.Users;
 import com.coeurious.sublimation.repository.UsersRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 
+@Transactional
 @Service
 public class AuthService implements UserDetailsService {
 

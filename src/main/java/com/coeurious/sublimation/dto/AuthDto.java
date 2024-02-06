@@ -1,6 +1,9 @@
 package com.coeurious.sublimation.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,7 +14,11 @@ import lombok.Data;
 public class AuthDto {
 
         @NotNull
-        private String email;
+        @JsonProperty("email")
+        @Pattern(regexp = "^(.+)@(\\S+)$")
+        private @Valid String email;
         @NotNull
-        private String password;
+        @JsonProperty("password")
+        @Pattern(regexp = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,20}$")
+        private @Valid String password;
 }

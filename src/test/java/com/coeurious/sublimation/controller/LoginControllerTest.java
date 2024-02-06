@@ -4,6 +4,7 @@ import com.coeurious.sublimation.config.TokenProvider;
 import com.coeurious.sublimation.entities.RoleEnum;
 import com.coeurious.sublimation.entities.Users;
 import com.coeurious.sublimation.dto.AuthDto;
+import com.coeurious.sublimation.exception.SublimationException;
 import com.coeurious.sublimation.mapper.UsersMapperUsersRegisterDto;
 import com.coeurious.sublimation.repository.UsersRepository;
 import com.coeurious.sublimation.service.AuthService;
@@ -59,7 +60,7 @@ class LoginControllerTest {
 	}
 
 	@Test
-	void testSignup_Ok() {
+	void testSignup_Ok() throws SublimationException {
         //setup
         Mockito.when(authService.signUp(Mockito.any())).thenReturn(Mockito.any());
         response = loginController.signUp(userDto);
@@ -68,7 +69,7 @@ class LoginControllerTest {
 	}
 
     @Test
-    void testSignup_KO() {
+    void testSignup_KO() throws SublimationException{
         Mockito.when(authService.signUp(Mockito.any()))
                 .thenThrow(new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), null,
                         Charset.defaultCharset()));
@@ -83,7 +84,7 @@ class LoginControllerTest {
         Users users = new Users("test@test.pro", "12345");
         users.setId(1L);
         ReflectionTestUtils.setField(loginController, "tokenProvider", tokenProvider);
-        ReflectionTestUtils.setField(tokenProvider, "jwtSecret", "2024");
+        ReflectionTestUtils.setField(tokenProvider, "jwtSecretUri", "2024");
         ReflectionTestUtils.setField(tokenProvider, "expireIn", 2);
         //Mock
         var authentication = new UsernamePasswordAuthenticationToken(users, "123456", users.getAuthorities());
@@ -102,7 +103,7 @@ class LoginControllerTest {
         Users users = new Users("test@test.pro", "12345");
         users.setId(1L);
         ReflectionTestUtils.setField(loginController, "tokenProvider", tokenProvider);
-        ReflectionTestUtils.setField(tokenProvider, "jwtSecret", "2024");
+        ReflectionTestUtils.setField(tokenProvider, "jwtSecretUri", "2024");
         ReflectionTestUtils.setField(tokenProvider, "expireIn", 2);
         //Mock
         var authentication = new UsernamePasswordAuthenticationToken(users, "123456", users.getAuthorities());

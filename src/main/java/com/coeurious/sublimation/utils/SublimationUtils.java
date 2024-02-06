@@ -5,6 +5,9 @@ import org.springframework.http.HttpHeaders;
 
 public class SublimationUtils {
 
+    private SublimationUtils() {
+    }
+
     public static HttpHeaders generateHeader(String token) {
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(token);
@@ -16,4 +19,6 @@ public class SublimationUtils {
                 .message(message)
                 .build();
     }
+
+
 }

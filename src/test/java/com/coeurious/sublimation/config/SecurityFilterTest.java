@@ -40,7 +40,7 @@ class SecurityFilterTest {
 
     @BeforeEach()
     public void setup() {
-        ReflectionTestUtils.setField(tokenProvider, "jwtSecret", "2024");
+        ReflectionTestUtils.setField(tokenProvider, "jwtSecretUri", "file:/secrets/coeurious-JWT.secret");
         ReflectionTestUtils.setField(tokenProvider, "expireIn", 2);
         ReflectionTestUtils.setField(securityFilter, "tokenProvider", tokenProvider);
         SecurityContextHolder.getContext().setAuthentication(null);
